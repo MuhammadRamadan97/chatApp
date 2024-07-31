@@ -12,7 +12,6 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 let onlineUsersList = [];
-let usersList = [];
 
 app.prepare().then(() => {
     const server = createServer((req, res) => {
@@ -28,8 +27,8 @@ app.prepare().then(() => {
         // Emit users list when a new user connects
         User.find({})
             .then(users => {
-                usersList = users;
-                io.emit('users list', usersList); // Emit updated users list
+
+                io.emit('users list', users); // Emit updated users list
             })
             .catch(err => console.log(err));
 

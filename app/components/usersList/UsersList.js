@@ -17,6 +17,7 @@ const UsersList = () => {
     useEffect(() => {
         socket.on('users list', (usersList) => {
             setUsersList(usersList.filter(user => user.username !== username));
+            console.log(usersList);
         });
 
         socket.on('online users list', (onlineUsersList) => {
