@@ -6,36 +6,43 @@ import UserItem from './UserItem';
 import { UserContext, useUser } from '@/app/context';
 import LogoutBtn from './LogoutBtn';
 
+// Initialize socket connection
 const socket = io('https://chatapp-9974.onrender.com/');
 
 const UsersList = () => {
     const [usersList, setUsersList] = useState([]);
     const [onlineUsersList, setOnlineUsersList] = useState([]);
-    const username = useUser().user.username;
+    const { user } = useUser();
     const { setSelectedUser, selectedUser } = useContext(UserContext);
+    const username = user.username;
 
     useEffect(() => {
-        socket.on('users list', (usersList) => {
-            setUsersList(usersList.filter(user => user.username !== username));
-            console.log(usersList);
-        });
-
-        socket.on('online users list', (onlineUsersList) => {
-            setOnlineUsersList(onlineUsersList);
-        });
-
-        const user = {
-            username,
+        // Handler to update users list
+        const handleUsersListUpdate = (list) => {
+            console.log('Users List Updated:', list);
+            setUsersList(list.filter(user => user.username !== username));
         };
 
-        socket.emit('user info', user);
+        // Handler to update online users list
+        const handleOnlineUsersListUpdate = (list) => {
+            console.log('Online Users List Updated:', list);
+            setOnlineUsersList(list);
+        };
 
-        // Clean up the event listeners when component unmounts
+        // Set up socket event listeners
+        socket.on('users list', handleUsersListUpdate);
+        socket.on('online users list', handleOnlineUsersListUpdate);
+
+        // Emit user info
+        const userInfo = { username };
+        socket.emit('user info', userInfo);
+
+        // Clean up event listeners on component unmount
         return () => {
-            socket.off('users list');
-            socket.off('online users list');
+            socket.off('users list', handleUsersListUpdate);
+            socket.off('online users list', handleOnlineUsersListUpdate);
         };
-    }, []);
+    }, [username, selectedUser]); // Dependency array to ensure the effect runs when `username` changes
 
     const handleUserClick = (userId) => {
         setSelectedUser(userId);
@@ -45,14 +52,18 @@ const UsersList = () => {
         <div>
             <h2 className="text-2xl font-bold mb-4">Users</h2>
             <ul>
-                {usersList.map(user => (
-                    <UserItem
-                        key={user._id}
-                        user={user}
-                        isOnline={onlineUsersList.some(onlineUser => onlineUser.username === user.username)}
-                        onClick={handleUserClick}
-                    />
-                ))}
+                {usersList.length > 0 ? (
+                    usersList.map(user => (
+                        <UserItem
+                            key={user._id}
+                            user={user}
+                            isOnline={onlineUsersList.some(onlineUser => onlineUser.username === user.username)}
+                            onClick={handleUserClick}
+                        />
+                    ))
+                ) : (
+                    <li>No users available</li>
+                )}
             </ul>
             <div className="mt-4">
                 <LogoutBtn />
