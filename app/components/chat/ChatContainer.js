@@ -24,7 +24,7 @@ export default function ChatContainer() {
             try {
                 const response = await axios.get('/api/messages');
                 setMessages(response.data);
-                console.log(response.data);
+                console.log("data" + response.data);
             } catch (error) {
                 console.error('Something went wrong', error);
             } finally {

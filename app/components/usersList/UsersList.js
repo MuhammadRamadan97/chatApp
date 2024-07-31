@@ -12,7 +12,7 @@ const UsersList = () => {
     const [usersList, setUsersList] = useState([]);
     const [onlineUsersList, setOnlineUsersList] = useState([]);
     const username = useUser().user.username;
-    const { setSelectedUser } = useContext(UserContext);
+    const { setSelectedUser, selectedUser } = useContext(UserContext);
 
     useEffect(() => {
         socket.on('users list', (usersList) => {
@@ -35,7 +35,7 @@ const UsersList = () => {
             socket.off('users list');
             socket.off('online users list');
         };
-    }, [username]);
+    }, [username, selectedUser]);
 
     const handleUserClick = (userId) => {
         setSelectedUser(userId);
