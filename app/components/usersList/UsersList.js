@@ -10,17 +10,16 @@ import LogoutBtn from './LogoutBtn';
 const socket = io('https://chatapp-9974.onrender.com/');
 
 const UsersList = () => {
-    const [usersList, setUsersList] = useState([]);
     const [onlineUsersList, setOnlineUsersList] = useState([]);
     const { user } = useUser();
-    const { setSelectedUser, selectedUser } = useContext(UserContext);
+    const { setSelectedUser, selectedUser, usersList, setUsersList } = useContext(UserContext);
     const username = user.username;
 
     useEffect(() => {
         // Handler to update users list
         const handleUsersListUpdate = (list) => {
             console.log('Users List Updated:', list);
-            setUsersList(list.filter(user => user.username !== username));
+            setUsersList(list);
         };
 
         // Handler to update online users list

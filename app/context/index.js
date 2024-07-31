@@ -8,10 +8,15 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     // State for user
     const [user, setUser] = useState(null);
+    const [usersList, setUsersList] = useState([]);
     useEffect(() => {
         const storedState = localStorage.getItem('user');
         if (storedState) {
             setUser(JSON.parse(storedState));
+        }
+        const storedUsersList = localStorage.getItem('usersList');
+        if (usersList) {
+            setUsersList(JSON.parse(storedUsersList));
         }
     }, []);
 
@@ -21,8 +26,10 @@ export const UserProvider = ({ children }) => {
         }
     }, [user]);
     useEffect(() => {
-        console.log('Current user:', user); // Log the current user
-    }, [user]);
+        if (usersList !== null) {
+            localStorage.setItem('usersList', JSON.stringify(usersList));
+        }
+    })
 
     // State for selectedUser
     const [selectedUser, setSelectedUser] = useState(null);
@@ -30,7 +37,7 @@ export const UserProvider = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, selectedUser, setSelectedUser }}>
+        <UserContext.Provider value={{ user, setUser, selectedUser, setSelectedUser, setUsersList }}>
             {children}
         </UserContext.Provider>
     );
