@@ -9,7 +9,8 @@ const Message = require('./models/Message');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-let onlineUsersList = []; // Use let to allow reassignment
+let onlineUsersList = [];
+let usersList = [];// Use let to allow reassignment
 
 app.prepare().then(() => {
     const server = createServer((req, res) => {
@@ -21,6 +22,14 @@ app.prepare().then(() => {
 
     io.on('connection', (socket) => {
         console.log('a user connected', socket.id);
+
+        User.find({})
+            .then(users => {
+                usersList = users;
+
+            })
+            .catch(err => console.log(err));
+        io.emit('users list', usersList);
 
         socket.on('disconnect', () => {
             console.log('user disconnected', socket.id);

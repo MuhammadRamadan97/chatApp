@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
-import axios from 'axios';
 import UserItem from './UserItem';
 import { UserContext, useUser } from '@/app/context';
 import LogoutBtn from './LogoutBtn';
@@ -16,21 +15,10 @@ const UsersList = () => {
     const { setSelectedUser } = useContext(UserContext);
 
     useEffect(() => {
-        // Fetch the list of users excluding the current user
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('/api/users/');
-                setUsersList(response.data.filter(user => user.username !== username));
-                console.log('Users:', response.data);
-            } catch (error) {
-                console.error('Something went wrong', error);
-            }
-        };
+        socket.on('users list', (usersList) => {
+            setUsersList(usersList.filter(user => user.username !== username));
+        });
 
-        fetchData();
-    }, [username]);
-
-    useEffect(() => {
         socket.on('online users list', (onlineUsersList) => {
             setOnlineUsersList(onlineUsersList);
         });
@@ -41,8 +29,9 @@ const UsersList = () => {
 
         socket.emit('user info', user);
 
-        // Clean up the event listener when component unmounts
+        // Clean up the event listeners when component unmounts
         return () => {
+            socket.off('users list');
             socket.off('online users list');
         };
     }, [username]);
