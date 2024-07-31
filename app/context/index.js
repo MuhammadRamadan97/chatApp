@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
         if (usersList !== null) {
             localStorage.setItem('usersList', JSON.stringify(usersList));
         }
-    })
+    }, [usersList]);
 
     // State for selectedUser
     const [selectedUser, setSelectedUser] = useState(null);
@@ -37,7 +37,7 @@ export const UserProvider = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ user, setUser, selectedUser, setSelectedUser, setUsersList }}>
+        <UserContext.Provider value={{ user, setUser, selectedUser, setSelectedUser, usersList, setUsersList }}>
             {children}
         </UserContext.Provider>
     );
