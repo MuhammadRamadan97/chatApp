@@ -4,13 +4,15 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
 const SocketIO = require('socket.io');
+const mongoose = require('mongoose'); // Ensure mongoose is included for MongoDB
 const Message = require('./models/Message');
+const User = require('./models/User');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 let onlineUsersList = [];
-let usersList = [];// Use let to allow reassignment
+let usersList = [];
 
 app.prepare().then(() => {
     const server = createServer((req, res) => {
@@ -23,19 +25,18 @@ app.prepare().then(() => {
     io.on('connection', (socket) => {
         console.log('a user connected', socket.id);
 
+        // Emit users list when a new user connects
         User.find({})
             .then(users => {
                 usersList = users;
-
+                io.emit('users list', usersList); // Emit updated users list
             })
             .catch(err => console.log(err));
-        io.emit('users list', usersList);
 
         socket.on('disconnect', () => {
             console.log('user disconnected', socket.id);
-            // Remove user from onlineUsersList when disconnected
             onlineUsersList = onlineUsersList.filter(user => user.id !== socket.id);
-            io.emit('online users list', onlineUsersList);
+            io.emit('online users list', onlineUsersList); // Emit updated online users list
         });
 
         socket.on('chat message', (msg) => {
@@ -45,7 +46,7 @@ app.prepare().then(() => {
             newMessage.save()
                 .then(savedMessage => {
                     console.log('Message saved to database');
-                    io.emit('chat message', savedMessage);
+                    io.emit('chat message', savedMessage); // Emit new message to all clients
                 })
                 .catch(err => console.log(err));
         });
@@ -58,7 +59,7 @@ app.prepare().then(() => {
                 onlineUsersList.push(newUser);
             }
 
-            io.emit('online users list', onlineUsersList);
+            io.emit('online users list', onlineUsersList); // Emit updated online users list
         });
     });
 
