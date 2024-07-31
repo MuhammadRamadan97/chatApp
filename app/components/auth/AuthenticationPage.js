@@ -30,7 +30,7 @@ function AuthenticationPage() {
 
             // Set user context
             setUser({ username: response.data.result.username, id: response.data.result._id });
-            setUsersList(response.data.usersList);
+            setUsersList(response.data.usersList.filter(user => user.username !== username));
 
             // Navigate to home page
             router.push('/');
