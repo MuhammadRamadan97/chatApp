@@ -20,8 +20,9 @@ export async function POST(req, res) {
         }
 
         const token = jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const usersList = await User.find({});
 
-        return new Response(JSON.stringify({ result: user, token }), { status: 200 });
+        return new Response(JSON.stringify({ result: user, token, usersList }), { status: 200 });
     } catch (error) {
         return new Response(JSON.stringify({ message: "Something went wrong" }), { status: 500 });
     }

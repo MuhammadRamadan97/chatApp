@@ -12,15 +12,10 @@ const socket = io('https://chatapp-9974.onrender.com/');
 const UsersList = () => {
     const [onlineUsersList, setOnlineUsersList] = useState([]);
     const { user } = useUser();
-    const { setSelectedUser, selectedUser, usersList, setUsersList } = useContext(UserContext);
+    const { setSelectedUser, usersList } = useContext(UserContext);
     const username = user.username;
 
     useEffect(() => {
-        // Handler to update users list
-        const handleUsersListUpdate = (list) => {
-            console.log('Users List Updated:', list);
-            setUsersList(list);
-        };
 
         // Handler to update online users list
         const handleOnlineUsersListUpdate = (list) => {
@@ -29,7 +24,6 @@ const UsersList = () => {
         };
 
         // Set up socket event listeners
-        socket.on('users list', handleUsersListUpdate);
         socket.on('online users list', handleOnlineUsersListUpdate);
 
         // Emit user info
@@ -38,10 +32,9 @@ const UsersList = () => {
 
         // Clean up event listeners on component unmount
         return () => {
-            socket.off('users list', handleUsersListUpdate);
             socket.off('online users list', handleOnlineUsersListUpdate);
         };
-    }, [username, selectedUser]); // Dependency array to ensure the effect runs when `username` changes
+    }, [username]); // Dependency array to ensure the effect runs when `username` changes
 
     const handleUserClick = (userId) => {
         setSelectedUser(userId);

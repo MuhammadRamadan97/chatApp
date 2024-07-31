@@ -11,7 +11,7 @@ function AuthenticationPage() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false); // Added loading state
     const router = useRouter();
-    const { setUser } = useContext(UserContext);
+    const { setUser, setUsersList } = useContext(UserContext);
 
     const handleSubmit = async ({ username, password }) => {
         setError('');
@@ -30,6 +30,7 @@ function AuthenticationPage() {
 
             // Set user context
             setUser({ username: response.data.result.username, id: response.data.result._id });
+            setUsersList(response.data.usersList);
 
             // Navigate to home page
             router.push('/');
