@@ -35,7 +35,7 @@ const UsersList = () => {
             socket.off('users list');
             socket.off('online users list');
         };
-    }, [username, selectedUser]);
+    }, []);
 
     const handleUserClick = (userId) => {
         setSelectedUser(userId);

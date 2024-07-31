@@ -6,7 +6,6 @@ import { useUser } from "./context";
 import dynamic from "next/dynamic";
 import { getCookie } from "@/utils/cookies";
 
-const LogoutBtn = dynamic(() => import("./components/usersList/LogoutBtn"), { ssr: false });
 const ChatContainer = dynamic(() => import("./components/chat/ChatContainer"), { ssr: false });
 const UsersList = dynamic(() => import("./components/usersList/UsersList"), { ssr: false });
 
