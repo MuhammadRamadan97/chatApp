@@ -7,7 +7,7 @@ import UserItem from './UserItem';
 import { UserContext, useUser } from '@/app/context';
 import LogoutBtn from './LogoutBtn';
 
-const socket = io('http://localhost:3000');
+const socket = io('https://chatapp-9974.onrender.com/');
 
 const UsersList = () => {
     const [usersList, setUsersList] = useState([]);

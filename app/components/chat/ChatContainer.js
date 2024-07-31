@@ -9,7 +9,7 @@ import { UserContext } from '@/app/context';
 let socket;
 
 if (typeof window !== "undefined") {
-    socket = io('http://localhost:3000');
+    socket = io('https://chatapp-9974.onrender.com/');
 }
 
 export default function ChatContainer() {
