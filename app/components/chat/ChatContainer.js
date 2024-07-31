@@ -24,6 +24,7 @@ export default function ChatContainer() {
             try {
                 const response = await axios.get('/api/messages');
                 setMessages(response.data);
+                console.log(response.data);
             } catch (error) {
                 console.error('Something went wrong', error);
             } finally {
@@ -32,7 +33,7 @@ export default function ChatContainer() {
         };
 
         fetchData();
-    }, []);
+    }, [user, selectedUser]);
 
     useEffect(() => {
         // Listen for new messages
