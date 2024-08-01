@@ -23,7 +23,7 @@ export default function ChatContainer() {
         const fetchData = async () => {
             try {
                 const response = await axios.get('/api/messages');
-                setMessages(response.data);
+                setMessages(JSON.parse(response.data));
                 console.log("data" + response.data);
             } catch (error) {
                 console.error('Something went wrong', error);
