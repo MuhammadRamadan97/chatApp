@@ -23,13 +23,15 @@ export default function ChatContainer() {
         const fetchData = async () => {
             try {
                 const response = await axios.get('/api/messages');
-                setMessages(JSON.parse(response.data));
-                console.log("data" + response.data);
+                if (typeof response.data === 'object') {
+                    setMessages(response.data);
+                } else {
+                    console.error('Invalid response data:', response.data);
+                }
             } catch (error) {
                 console.error('Something went wrong', error);
-            } finally {
-                setLoading(false);
             }
+
         };
 
         fetchData();

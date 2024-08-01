@@ -6,12 +6,11 @@ export async function GET(req, res) {
     await dbConnect();
 
     try {
-
         const messages = await Message.find({});
-
-
+        console.log(messages);
         return new Response(JSON.stringify(messages), { status: 200 });
     } catch (error) {
         return new Response(JSON.stringify({ message: "Something went wrong" }), { status: 500 });
     }
 }
+
