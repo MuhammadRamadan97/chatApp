@@ -7,7 +7,7 @@ import { UserContext, useUser } from '@/app/context';
 import LogoutBtn from './LogoutBtn';
 
 // Initialize socket connection
-const socket = io('https://chatapp-by7wojx8c-muhammadramadan97s-projects.vercel.app/');
+const socket = io('https://chatapp-zeta-steel.vercel.app/');
 
 const UsersList = () => {
     const [onlineUsersList, setOnlineUsersList] = useState([]);

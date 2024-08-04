@@ -9,7 +9,7 @@ import { UserContext } from '@/app/context';
 let socket;
 
 if (typeof window !== "undefined") {
-    socket = io('https://chatapp-by7wojx8c-muhammadramadan97s-projects.vercel.app/');
+    socket = io('https://chatapp-zeta-steel.vercel.app/');
 }
 
 export default function ChatContainer() {
