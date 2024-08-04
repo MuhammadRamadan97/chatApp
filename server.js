@@ -6,7 +6,18 @@ const next = require('next');
 const SocketIO = require('socket.io');
 const Message = require('./models/Message');
 const User = require('./models/User');
+const mongoose = require('mongoose');
 
+const connectWithRetry = () => {
+    mongoose.connect(process.env.MONGO_URI).then(() => {
+        console.log('MongoDB is connected');
+    }).catch(err => {
+        console.error('MongoDB connection unsuccessful, retrying in 5 seconds.', err);
+        setTimeout(connectWithRetry, 5000); // Retry after 5 seconds
+    });
+};
+
+connectWithRetry();
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
