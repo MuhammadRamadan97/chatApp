@@ -25,6 +25,7 @@ export default function ChatContainer() {
                 const response = await axios.get('/api/messages');
                 if (typeof response.data === 'object') {
                     setMessages(response.data);
+                    setLoading(false);
                 } else {
                     console.error('Invalid response data:', response.data);
                 }
