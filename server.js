@@ -9,7 +9,7 @@ const User = require('./models/User');
 const mongoose = require('mongoose');
 
 const connectWithRetry = () => {
-    mongoose.connect(process.env.MONGO_URI).then(() => {
+    mongoose.connect(process.env.MONGODB_URI).then(() => {
         console.log('MongoDB is connected');
     }).catch(err => {
         console.error('MongoDB connection unsuccessful, retrying in 5 seconds.', err);
