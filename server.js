@@ -4,7 +4,6 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
 const SocketIO = require('socket.io');
-const mongoose = require('mongoose'); // Ensure mongoose is included for MongoDB
 const Message = require('./models/Message');
 const User = require('./models/User');
 
@@ -12,16 +11,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 let onlineUsersList = [];
-const connectToDatabase = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI);
-        console.log('Connected to MongoDB');
-    } catch (error) {
-        console.error('Failed to connect to MongoDB', error);
-    }
-};
 
-connectToDatabase();
+
 app.prepare().then(() => {
     const server = createServer((req, res) => {
         const parsedUrl = parse(req.url, true);

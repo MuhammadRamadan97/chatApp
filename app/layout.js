@@ -1,5 +1,4 @@
 
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "./context";
 import axios from "axios";
@@ -13,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   axios.defaults.withCredentials = true;
   // Change base URL for Axios requests
-  axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'https://localhost:3000/api' : 'http://localhost:3000/api';
+  axios.defaults.baseURL = 'http://localhost:3000/api/';
 
   return (
     <>
