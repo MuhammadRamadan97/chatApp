@@ -36,7 +36,7 @@ export default function ChatContainer() {
         };
 
         fetchData();
-    }, [user, selectedUser]);
+    }, [messages]);
 
     useEffect(() => {
         // Listen for new messages
