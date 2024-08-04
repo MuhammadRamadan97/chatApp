@@ -12,7 +12,16 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 let onlineUsersList = [];
+const connectToDatabase = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log('Connected to MongoDB');
+    } catch (error) {
+        console.error('Failed to connect to MongoDB', error);
+    }
+};
 
+connectToDatabase();
 app.prepare().then(() => {
     const server = createServer((req, res) => {
         const parsedUrl = parse(req.url, true);
@@ -61,6 +70,8 @@ app.prepare().then(() => {
             io.emit('online users list', onlineUsersList); // Emit updated online users list
         });
     });
+
+
 
     const PORT = process.env.PORT || 3000;
     server.listen(PORT, (err) => {
