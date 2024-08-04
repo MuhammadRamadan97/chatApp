@@ -17,25 +17,25 @@ export default function ChatContainer() {
     const [loading, setLoading] = useState(true);
     const { user, selectedUser } = useContext(UserContext);
     const messagesEndRef = useRef(null);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('/api/messages');
+            if (typeof response.data === 'object') {
+                setMessages(response.data);
+                setLoading(false);
+            } else {
+                console.error('Invalid response data:', response.data);
+            }
+        } catch (error) {
+            console.error('Something went wrong', error);
+        }
+
+    };
 
     useEffect(() => {
         // Set initial messages
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('/api/messages');
-                if (typeof response.data === 'object') {
-                    setMessages(response.data);
-                    setLoading(false);
-                } else {
-                    console.error('Invalid response data:', response.data);
-                }
-            } catch (error) {
-                console.error('Something went wrong', error);
-            }
-
-        };
-
         fetchData();
+
     }, []);
 
     useEffect(() => {
@@ -45,12 +45,7 @@ export default function ChatContainer() {
                 (msg.sender === user.id && msg.receiver === selectedUser) ||
                 (msg.sender === selectedUser && msg.receiver === user.id)
             ) {
-                setMessages((prevMessages) => {
-                    if (!prevMessages.some((message) => message.time === msg.time)) {
-                        return [...prevMessages, msg];
-                    }
-                    return prevMessages;
-                });
+                fetchData();
                 scrollToBottom();
             }
         };
