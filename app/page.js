@@ -62,9 +62,9 @@ export default function Home() {
         </div>
       ) : (
         <div className="flex h-full w-full">
-          <div className="w-2/3 h-full">
+          {selectedUser && <div className="w-2/3 h-full">
             <ChatContainer />
-          </div>
+          </div>}
           <div className="w-1/3 h-full">
             <UsersList />
           </div>
