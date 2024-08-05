@@ -5,12 +5,14 @@ import axios from 'axios';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { UserContext } from '@/app/context';
+import { unstable_noStore as noStore } from 'next/cache';
 
 let socket;
 
 
 socket = io('https://chatapp-9974.onrender.com/');
 export default function ChatContainer() {
+    noStore();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user, selectedUser } = useContext(UserContext);
