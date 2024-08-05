@@ -8,35 +8,32 @@ import { UserContext } from '@/app/context';
 
 let socket;
 
-if (typeof window !== "undefined") {
-    socket = io('https://chatapp-9974.onrender.com/');
-}
-
 export default function ChatContainer() {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user, selectedUser } = useContext(UserContext);
     const messagesEndRef = useRef(null);
-    ;
 
     useEffect(() => {
-        // Set initial messages
         const fetchData = async () => {
             try {
-                const response = await axios.get('/api/messages');
-                if (typeof response.data === 'object') {
+                const response = await axios.get('/api/messages', {
+                    headers: {
+                        'Cache-Control': 'no-store',
+                    },
+                });
+                if (Array.isArray(response.data)) {
                     setMessages(response.data);
-                    setLoading(false);
                 } else {
                     console.error('Invalid response data:', response.data);
                 }
             } catch (error) {
-                console.error('Something went wrong', error);
+                console.error('Error fetching messages:', error);
+            } finally {
+                setLoading(false);
             }
-
-        }
+        };
         fetchData();
-
     }, []);
 
     useEffect(() => {
