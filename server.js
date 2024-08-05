@@ -57,7 +57,7 @@ app.prepare().then(() => {
             newMessage.save()
                 .then(savedMessage => {
                     console.log('Message saved to database');
-                    io.emit('chat message', savedMessage); // Emit only the new message
+                    socket.broadcast.emit('chat message', savedMessage); // Emit only the new message
                 })
                 .catch(err => console.error('Error saving message:', err));
         });
@@ -70,7 +70,7 @@ app.prepare().then(() => {
                 onlineUsersList.push(newUser);
             }
 
-            socket.broadcast.emit('online users list', onlineUsersList); // Emit updated online users list
+            io.emit('online users list', onlineUsersList); // Emit updated online users list
         });
     });
 
