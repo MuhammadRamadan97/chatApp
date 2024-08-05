@@ -12,6 +12,7 @@ let socket;
 socket = io('https://chatapp-9974.onrender.com/');
 export default function ChatContainer() {
     const [messages, setMessages] = useState([]);
+    const [fetch, setFetch] = useState(true)
     const [loading, setLoading] = useState(true);
     const { user, selectedUser } = useContext(UserContext);
     const messagesEndRef = useRef(null);
@@ -37,13 +38,14 @@ export default function ChatContainer() {
             }
         };
         fetchData();
-    }, []);
+    }, [fetch]);
 
     useEffect(() => {
         // Listen for new messages
         const handleNewMessage = (msg) => {
 
             setMessages((prevMessages) => [...prevMessages, msg]);
+            setFetch(prevFetch => !prevFetch);
             scrollToBottom();
 
 
@@ -75,6 +77,7 @@ export default function ChatContainer() {
         // Emit the message to the server
         if (socket) {
             socket.emit('chat message', newMsg);
+            setFetch(prev => !prev);
         }
         setMessages((prevMessages) => [...prevMessages, newMsg]);
 
