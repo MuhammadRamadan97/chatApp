@@ -57,35 +57,31 @@ app.prepare().then(() => {
                 .then(async savedMessage => {
 
                     console.log('Message saved to database');
-                    try {
-                        const messages = await Message.find({});
-                        console.log(messages);
-                        socket.broadcast.emit('chat message', messages);
+                    const messages = await Message.find({});
+                    console.log(messages);
+                    io.emit('chat message', messages);
 
-                    }
-                     // Emit new message to all clients
-                })
-                .catch(err => console.log(err));
 
+
+                });
+
+            socket.on('user info', (user) => {
+                const newUser = { username: user.username, id: socket.id };
+                const existingUser = onlineUsersList.find(u => u.id === newUser.id);
+
+                if (!existingUser) {
+                    onlineUsersList.push(newUser);
+                }
+
+                io.emit('online users list', onlineUsersList); // Emit updated online users list
+            });
         });
 
-        socket.on('user info', (user) => {
-            const newUser = { username: user.username, id: socket.id };
-            const existingUser = onlineUsersList.find(u => u.id === newUser.id);
 
-            if (!existingUser) {
-                onlineUsersList.push(newUser);
-            }
 
-            io.emit('online users list', onlineUsersList); // Emit updated online users list
+        const PORT = process.env.PORT || 3000;
+        server.listen(PORT, (err) => {
+            if (err) throw err;
+            console.log(`> Ready on http://localhost:${PORT}`);
         });
     });
-
-
-
-    const PORT = process.env.PORT || 3000;
-    server.listen(PORT, (err) => {
-        if (err) throw err;
-        console.log(`> Ready on http://localhost:${PORT}`);
-    });
-});
