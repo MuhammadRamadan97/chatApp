@@ -8,9 +8,8 @@ import { UserContext } from '@/app/context';
 
 let socket;
 
-if (typeof window !== "undefined") {
-    socket = io('https://chatapp-9974.onrender.com/');
-}
+
+socket = io('https://chatapp-9974.onrender.com/');
 export default function ChatContainer() {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
