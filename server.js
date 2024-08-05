@@ -54,11 +54,19 @@ app.prepare().then(() => {
             const { text, sender, receiver, time } = msg;
             const newMessage = new Message({ text, sender, receiver, time });
             newMessage.save()
-                .then(savedMessage => {
+                .then(async savedMessage => {
+
                     console.log('Message saved to database');
-                    socket.broadcast.emit('chat message', savedMessage); // Emit new message to all clients
+                    try {
+                        const messages = await Message.find({});
+                        console.log(messages);
+                        socket.broadcast.emit('chat message', messages);
+
+                    }
+                     // Emit new message to all clients
                 })
                 .catch(err => console.log(err));
+
         });
 
         socket.on('user info', (user) => {

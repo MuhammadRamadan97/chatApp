@@ -40,16 +40,14 @@ export default function ChatContainer() {
 
     useEffect(() => {
         // Listen for new messages
-        const handleNewMessage = (msg) => {
-            if (
-                (msg.sender === user.id && msg.receiver === selectedUser) ||
-                (msg.sender === selectedUser && msg.receiver === user.id)
-            ) {
-                setMessages((prevMessages) => [...prevMessages, msg]);
-                scrollToBottom();
+        const handleNewMessage = (msgs) => {
+
+            setMessages((prevMessages) => JSON.parse(msgs));
+            console.log(msgs);
+            scrollToBottom();
 
 
-            }
+
         };
 
         if (socket) {
