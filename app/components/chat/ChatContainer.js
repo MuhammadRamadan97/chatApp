@@ -48,6 +48,8 @@ export default function ChatContainer() {
             ) {
                 setMessages((prevMessages) => [...prevMessages, msg]);
                 scrollToBottom();
+
+
             }
         };
 

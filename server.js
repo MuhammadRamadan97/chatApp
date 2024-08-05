@@ -56,7 +56,7 @@ app.prepare().then(() => {
             newMessage.save()
                 .then(savedMessage => {
                     console.log('Message saved to database');
-                    io.emit('chat message', savedMessage); // Emit new message to all clients
+                    io.broadcast.emit('chat message', savedMessage); // Emit new message to all clients
                 })
                 .catch(err => console.log(err));
         });
