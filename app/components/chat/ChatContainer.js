@@ -26,6 +26,7 @@ export default function ChatContainer() {
                 });
                 if (Array.isArray(response.data)) {
                     setMessages(response.data);
+                    console.log(response.data);
                 } else {
                     console.error('Invalid response data:', response.data);
                 }
@@ -40,10 +41,9 @@ export default function ChatContainer() {
 
     useEffect(() => {
         // Listen for new messages
-        const handleNewMessage = (msgs) => {
+        const handleNewMessage = (msg) => {
 
-            setMessages((prevMessages) => JSON.parse(msgs));
-            console.log(msgs);
+            setMessages((prevMessages) => [...prevMessages, msg]);
             scrollToBottom();
 
 

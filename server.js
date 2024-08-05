@@ -70,7 +70,7 @@ app.prepare().then(() => {
                 onlineUsersList.push(newUser);
             }
 
-            io.emit('online users list', onlineUsersList); // Emit updated online users list
+            socket.broadcast.emit('online users list', onlineUsersList); // Emit updated online users list
         });
     });
 
