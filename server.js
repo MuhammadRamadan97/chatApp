@@ -48,7 +48,7 @@ app.prepare().then(() => {
                     ]
                 }).sort({ createdAt: 1 });
 
-                socket.emit('response messages', messages);
+                socket.emit('response messages', JSON.stringify(messages));
             } catch (error) {
                 console.error('Error fetching messages:', error);
                 socket.emit('response messages', []);
