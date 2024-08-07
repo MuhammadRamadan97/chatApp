@@ -39,7 +39,6 @@ app.prepare().then(() => {
 
         socket.on('request messages', async ({ userId, selectedUserId }) => {
             try {
-                await dbConnect(); // Ensure database connection
 
                 // Fetch messages between the two users
                 const messages = await Message.find({
