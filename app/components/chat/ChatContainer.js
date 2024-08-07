@@ -20,7 +20,15 @@ export default function ChatContainer() {
     useEffect(() => {
         // Request notification permission
         if (Notification.permission !== 'granted') {
-            Notification.requestPermission();
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted');
+                } else {
+                    console.log('Notification permission denied');
+                }
+            }).catch(error => {
+                console.error('Error requesting notification permission:', error);
+            });
         }
 
         const fetchMessages = () => {
@@ -55,9 +63,14 @@ export default function ChatContainer() {
 
             // Send notification if window is not active
             if (document.hidden && Notification.permission === 'granted' && msg.sender !== user.id) {
-                new Notification(`New message from ${msg.sender}`, {
+                const notification = new Notification(`New message from ${msg.sender}`, {
                     body: msg.text,
                 });
+
+                notification.onclick = () => {
+                    window.focus();
+                    notification.close();
+                };
             }
         };
 
