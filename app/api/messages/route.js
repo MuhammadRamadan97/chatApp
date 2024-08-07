@@ -1,5 +1,3 @@
-// pages/api/messages.js
-
 import Message from '@/models/Message';
 import dbConnect from '@/utils/dbConnect';
 
@@ -12,9 +10,25 @@ export async function GET(req, res) {
 
         console.log('Fetched messages:', messages); // Log fetched messages for debugging
 
-        return new Response(JSON.stringify(messages), { status: 200 });
+        return new Response(JSON.stringify(messages), {
+            status: 200,
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+                'Surrogate-Control': 'no-store'
+            }
+        });
     } catch (error) {
         console.error('Error fetching messages:', error); // Log error details
-        return new Response(JSON.stringify({ message: "Something went wrong" }), { status: 500 });
+        return new Response(JSON.stringify({ message: "Something went wrong" }), {
+            status: 500,
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+                'Surrogate-Control': 'no-store'
+            }
+        });
     }
 }
