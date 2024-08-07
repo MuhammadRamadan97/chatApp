@@ -6,7 +6,6 @@ const SocketIO = require('socket.io');
 const Message = require('./models/Message');
 const User = require('./models/User');
 const mongoose = require('mongoose');
-const { default: dbConnect } = require('./utils/dbConnect');
 
 const connectWithRetry = () => {
     mongoose.connect(process.env.MONGODB_URI)
