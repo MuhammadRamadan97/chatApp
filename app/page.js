@@ -8,8 +8,12 @@ import { getCookie } from "@/utils/cookies";
 
 const ChatContainer = dynamic(() => import("./components/chat/ChatContainer"), { ssr: false });
 const UsersList = dynamic(() => import("./components/usersList/UsersList"), { ssr: false });
+import { unstable_noStore as noStore } from 'next/cache';
 
 export default function Home() {
+  noStore(() => {
+    console.log('This will not be server-side rendered.');
+  });
   const router = useRouter();
   const token = getCookie('token');
   const { selectedUser, setSelectedUser } = useUser();
