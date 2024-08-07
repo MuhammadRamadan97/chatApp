@@ -5,7 +5,7 @@ import axios from 'axios';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { UserContext } from '@/app/context';
-import { unstable_noStore as noStore } from 'next/cache';
+import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 
 let socket;
 
@@ -21,7 +21,7 @@ export default function ChatContainer() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('/api/messages', { cache: 'no-store' });
+                const response = await axios.get('/api/messages', { cache: 'no-store', next: { revalidate: 0 } });
                 if (Array.isArray(response.data)) {
                     setMessages(response.data);
                     console.log(response.data);
