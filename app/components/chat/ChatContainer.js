@@ -18,6 +18,11 @@ export default function ChatContainer() {
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
+        // Request notification permission
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+
         const fetchMessages = () => {
             socket.emit('request messages', { userId: user.id, selectedUserId: selectedUser });
         };
@@ -47,6 +52,13 @@ export default function ChatContainer() {
         const handleNewMessage = (msg) => {
             setMessages((prevMessages) => [...prevMessages, msg]);
             scrollToBottom();
+
+            // Send notification if window is not active
+            if (document.hidden && Notification.permission === 'granted' && msg.sender !== user.id) {
+                new Notification(`New message from ${msg.sender}`, {
+                    body: msg.text,
+                });
+            }
         };
 
         if (socket) {
