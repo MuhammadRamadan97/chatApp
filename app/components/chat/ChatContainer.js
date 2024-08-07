@@ -28,6 +28,7 @@ export default function ChatContainer() {
 
         const handleMessages = (fetchedMessages) => {
             setMessages(JSON.parse(fetchedMessages));
+            console.log('Fetched messages:', JSON.parse(fetchedMessages));
             setLoading(false);
             scrollToBottom();
         };
