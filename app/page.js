@@ -42,10 +42,10 @@ export default function Home() {
   return (
     <div className="flex h-screen relative">
       {isMobile ? (
-        <div className="w-full h-full">
+        <div className="w-full h-full relative">
           {selectedUser && (
             <button
-              className="fixed top-2 right-2 p-4 text-2xl"
+              className="fixed top-2 right-2 p-4 text-2xl z-10"
               onClick={toggleUsersList}
               aria-label="Toggle Users List"
             >
@@ -57,20 +57,22 @@ export default function Home() {
           ) : (
             <div className="flex flex-col h-full">
               <ChatContainer className="flex-1" />
-
             </div>
           )}
         </div>
       ) : (
         <div className="flex h-full w-full">
-          {selectedUser && <div className="w-2/3 h-full">
-            <ChatContainer />
-          </div>}
+          {selectedUser && (
+            <div className="w-2/3 h-full">
+              <ChatContainer />
+            </div>
+          )}
           <div className="w-1/3 h-full">
             <UsersList />
           </div>
         </div>
       )}
     </div>
+
   );
 }
