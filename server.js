@@ -36,6 +36,25 @@ app.prepare().then(() => {
     io.on('connection', (socket) => {
         console.log('A user connected:', socket.id);
 
+        socket.on('request messages', async ({ userId, selectedUserId }) => {
+            try {
+                await dbConnect(); // Ensure database connection
+
+                // Fetch messages between the two users
+                const messages = await Message.find({
+                    $or: [
+                        { sender: userId, receiver: selectedUserId },
+                        { sender: selectedUserId, receiver: userId }
+                    ]
+                }).sort({ createdAt: 1 });
+
+                socket.emit('response messages', messages);
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+                socket.emit('response messages', []);
+            }
+        });
+
         // Emit users list when a new user connects
         User.find({})
             .then(users => {

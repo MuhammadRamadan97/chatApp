@@ -1,16 +1,15 @@
 'use client';
 import { useContext, useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
-import axios from 'axios';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { UserContext } from '@/app/context';
-import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
+import { unstable_noStore as noStore } from 'next/cache';
 
 let socket;
 
-
 socket = io('https://chatapp-9974.onrender.com/');
+
 export default function ChatContainer() {
     noStore();
     const [messages, setMessages] = useState([]);
@@ -19,34 +18,34 @@ export default function ChatContainer() {
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('/api/messages', { cache: 'no-store', next: { revalidate: 0 } });
-                if (Array.isArray(response.data)) {
-                    setMessages(response.data);
-                    console.log(response.data);
-                } else {
-                    console.error('Invalid response data:', response.data);
-                }
-            } catch (error) {
-                console.error('Error fetching messages:', error);
-            } finally {
-                setLoading(false);
+        const fetchMessages = () => {
+            socket.emit('request messages', { userId: user.id, selectedUserId: selectedUser });
+        };
+
+        if (socket && user.id && selectedUser) {
+            fetchMessages();
+        }
+
+        const handleMessages = (fetchedMessages) => {
+            setMessages(fetchedMessages);
+            setLoading(false);
+            scrollToBottom();
+        };
+
+        socket.on('response messages', handleMessages);
+
+        // Clean up the effect by removing the listener
+        return () => {
+            if (socket) {
+                socket.off('response messages', handleMessages);
             }
         };
-        fetchData();
-    }, []);
+    }, [user.id, selectedUser]);
 
     useEffect(() => {
-        // Listen for new messages
         const handleNewMessage = (msg) => {
-
             setMessages((prevMessages) => [...prevMessages, msg]);
-
             scrollToBottom();
-
-
-
         };
 
         if (socket) {
@@ -74,7 +73,6 @@ export default function ChatContainer() {
         // Emit the message to the server
         if (socket) {
             socket.emit('chat message', newMsg);
-
         }
         setMessages((prevMessages) => [...prevMessages, newMsg]);
 
