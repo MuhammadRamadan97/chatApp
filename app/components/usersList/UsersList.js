@@ -7,7 +7,7 @@ import { UserContext, useUser } from '@/app/context';
 import LogoutBtn from './LogoutBtn';
 
 // Initialize socket connection
-const socket = io('https://chatapp-9974.onrender.com/');
+socket = io('https://chatapp-9974.onrender.com/');
 
 const UsersList = () => {
     const [onlineUsersList, setOnlineUsersList] = useState([]);
@@ -16,7 +16,6 @@ const UsersList = () => {
     const username = user.username;
 
     useEffect(() => {
-
         // Handler to update online users list
         const handleOnlineUsersListUpdate = (list) => {
             console.log('Online Users List Updated:', list);
@@ -41,9 +40,8 @@ const UsersList = () => {
     };
 
     return (
-        <div>
-            <h2 className="text-2xl font-bold mb-4">Users</h2>
-            <ul>
+        <div className="flex flex-col p-4 bg-sky-300 h-full w-full">
+            <ul className="space-y-2 overflow-y-auto flex-grow">
                 {usersList.length > 0 ? (
                     usersList.map(user => (
                         <UserItem
@@ -54,10 +52,10 @@ const UsersList = () => {
                         />
                     ))
                 ) : (
-                    <li>No users available</li>
+                    <li className="text-gray-600">No users available</li>
                 )}
             </ul>
-            <div className="mt-4">
+            <div className="mt-auto w-full text-center">
                 <LogoutBtn />
             </div>
         </div>

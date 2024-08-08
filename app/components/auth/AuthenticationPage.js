@@ -57,8 +57,8 @@ function AuthenticationPage() {
     };
 
     return (
-        <div className="bg-blue-200 p-4 rounded-lg flex flex-col items-center justify-center" style={{ height: '100vh', width: '100vw' }}>
-            <h2 className="text-2xl font-bold mb-4 text-green-500">{isRegister ? 'Register' : 'Login'}</h2>
+        <div className="bg-sky-300 p-4 rounded-lg flex flex-col items-center justify-center" style={{ height: '100vh', width: '100vw' }}>
+            <h2 className="text-4xl font-bold mb-4 text-blue-700 ">{isRegister ? 'Register' : 'Login'}</h2>
             <AuthenticationForm
                 isRegister={isRegister}
                 onSubmit={handleSubmit}

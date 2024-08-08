@@ -122,7 +122,7 @@ export default function ChatContainer() {
     }, [filteredMessages]);
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full ">
             {!selectedUser && <h3>Choose a user to begin chatting</h3>}
             {loading ? (
                 <div>Loading messages...</div>
