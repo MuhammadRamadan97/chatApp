@@ -8,7 +8,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 let socket;
 
-socket = io('https://chatapp-9974.onrender.com/');
+socket = io('https://chatapp-1-5zsg.onrender.com/');
 
 export default function ChatContainer() {
     noStore();
