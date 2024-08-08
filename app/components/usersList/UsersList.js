@@ -6,16 +6,18 @@ import UserItem from './UserItem';
 import { UserContext, useUser } from '@/app/context';
 import LogoutBtn from './LogoutBtn';
 
-// Initialize socket connection
-socket = io('https://chatapp-1-5zsg.onrender.com');
-
+// Initialize socket connection inside the component
 const UsersList = () => {
     const [onlineUsersList, setOnlineUsersList] = useState([]);
     const { user } = useUser();
     const { setSelectedUser, usersList } = useContext(UserContext);
     const username = user.username;
 
+    // Initialize socket connection inside useEffect to ensure it happens only once
     useEffect(() => {
+        // Initialize socket connection
+        const socket = io('https://chatapp-1-5zsg.onrender.com');
+
         // Handler to update online users list
         const handleOnlineUsersListUpdate = (list) => {
             console.log('Online Users List Updated:', list);
@@ -29,9 +31,10 @@ const UsersList = () => {
         const userInfo = { username };
         socket.emit('user info', userInfo);
 
-        // Clean up event listeners on component unmount
+        // Clean up event listeners and disconnect socket on component unmount
         return () => {
             socket.off('online users list', handleOnlineUsersListUpdate);
+            socket.disconnect();
         };
     }, [username]); // Dependency array to ensure the effect runs when `username` changes
 
